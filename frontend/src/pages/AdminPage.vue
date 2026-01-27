@@ -25,7 +25,7 @@ const homeConfig = ref<any>({
     case_text: ''
 });
 const faqs = ref<any[]>([]);
-const systemConfig = ref({
+const systemConfig = ref<any>({
     telegram_bot_token: '',
     telegram_chat_id: ''
 });
