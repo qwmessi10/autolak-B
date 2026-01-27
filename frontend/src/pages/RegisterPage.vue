@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import { useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,6 +13,10 @@ const generalError = ref('');
 const isLoading = ref(false);
 const authStore = useAuthStore();
 const router = useRouter();
+
+const bgImage = computed(() => {
+    return `url('/login.jpg')`;
+});
 
 const getDeviceId = () => {
   let deviceId = localStorage.getItem('device_id');
@@ -71,7 +75,8 @@ const handleRegister = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=India%20Landscape%20Business%20Sunrise&image_size=landscape_16_9')">
+  <div class="min-h-screen flex items-center justify-center bg-gray-900 bg-cover bg-center bg-no-repeat bg-fixed" 
+       :style="{ backgroundImage: bgImage }">
     <div class="bg-white/90 backdrop-blur-md p-8 rounded-lg shadow-2xl w-full max-w-md">
       <h2 class="text-3xl font-bold text-center text-navy-blue mb-6">Register</h2>
       <form @submit.prevent="handleRegister" class="space-y-4">

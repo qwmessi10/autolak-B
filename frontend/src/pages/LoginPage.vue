@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import { useRouter } from 'vue-router';
 
@@ -9,6 +9,10 @@ const authStore = useAuthStore();
 const router = useRouter();
 const error = ref('');
 const isLoading = ref(false);
+
+const bgImage = computed(() => {
+    return `url('/login.jpg')`;
+});
 
 const handleLogin = async () => {
   error.value = '';
@@ -29,7 +33,8 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=India%20Cityscape%20Night%20Bokeh%20Business&image_size=landscape_16_9')">
+  <div class="min-h-screen flex items-center justify-center bg-gray-900 bg-cover bg-center bg-no-repeat bg-fixed" 
+       :style="{ backgroundImage: bgImage }">
     <div class="bg-white/90 backdrop-blur-md p-8 rounded-lg shadow-2xl w-full max-w-md">
       <h2 class="text-3xl font-bold text-center text-navy-blue mb-6">Login</h2>
       <form @submit.prevent="handleLogin" class="space-y-4">

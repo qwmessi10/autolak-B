@@ -33,6 +33,7 @@ class SystemConfig(models.Model):
 class SEOArticle(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField(help_text="Markdown supported")
+    cover_image = models.ImageField(upload_to='seo_covers/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

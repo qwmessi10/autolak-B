@@ -52,7 +52,7 @@ const slogan = ref({
 
 const intro = ref({
   text: "We provide authentic engagement to help you grow.",
-  flowchart: "https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=Process%20Flowchart%20Infographic%20Business%20Steps%20Clean%20Design&image_size=landscape_16_9"
+  flowchart: "https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=SEO%20Process%20Infographic%20Flowchart%20Step%20by%20Step%20Analysis%20Optimization%20Ranking%20Growth&image_size=landscape_16_9"
 });
 
 const cases = ref([
@@ -180,31 +180,31 @@ onMounted(async () => {
       </div>
 
       <!-- Mobile Menu -->
-      <div v-if="isMenuOpen" class="md:hidden bg-white border-t p-4 space-y-4">
+      <div v-if="isMenuOpen" class="md:hidden bg-white border-t p-4 space-y-4 absolute top-16 left-0 w-full h-[calc(100vh-4rem)] overflow-y-auto shadow-xl">
          <div class="space-y-2">
             <p class="font-semibold text-gray-500">Navigation</p>
-            <a @click="scrollToSection('intro')" class="block pl-4 py-1 hover:text-saffron">Introduction</a>
-            <a @click="scrollToSection('cases')" class="block pl-4 py-1 hover:text-saffron">Success Cases</a>
-            <a @click="scrollToSection('faq')" class="block pl-4 py-1 hover:text-saffron">FAQ</a>
+            <a @click="scrollToSection('intro'); isMenuOpen = false" class="block pl-4 py-1 hover:text-saffron cursor-pointer">Introduction</a>
+            <a @click="scrollToSection('cases'); isMenuOpen = false" class="block pl-4 py-1 hover:text-saffron cursor-pointer">Success Cases</a>
+            <a @click="scrollToSection('faq'); isMenuOpen = false" class="block pl-4 py-1 hover:text-saffron cursor-pointer">FAQ</a>
          </div>
          <div class="space-y-2">
             <p class="font-semibold text-gray-500">About Us</p>
-            <a @click="openExternalLink('https://t.me/AutoLakBSOfficial/5')" class="block pl-4 py-1 hover:text-saffron">Telegram</a>
-            <a @click="openExternalLink('https://wa.me/601169686094')" class="block pl-4 py-1 hover:text-saffron">WhatsApp</a>
-            <a @click="openExternalLink('https://www.youtube.com/@AyanKhan-g7o1g')" class="block pl-4 py-1 hover:text-saffron">YouTube</a>
+            <a @click="openExternalLink('https://t.me/AutoLakBSOfficial/5'); isMenuOpen = false" class="block pl-4 py-1 hover:text-saffron cursor-pointer">Telegram</a>
+            <a @click="openExternalLink('https://wa.me/601169686094'); isMenuOpen = false" class="block pl-4 py-1 hover:text-saffron cursor-pointer">WhatsApp</a>
+            <a @click="openExternalLink('https://www.youtube.com/@AyanKhan-g7o1g'); isMenuOpen = false" class="block pl-4 py-1 hover:text-saffron cursor-pointer">YouTube</a>
          </div>
-         <button @click="navigateTo('/seo-class')" class="block w-full text-left py-2 hover:text-saffron">SEO Class</button>
+         <button @click="navigateTo('/seo-class'); isMenuOpen = false" class="block w-full text-left py-2 hover:text-saffron">SEO Class</button>
          
          <template v-if="!authStore.isAuthenticated">
-            <button @click="navigateTo('/login')" class="block w-full text-left py-2 hover:text-saffron">Login</button>
-            <button @click="navigateTo('/register')" class="block w-full bg-saffron text-white px-4 py-2 rounded-md text-center">Register</button>
+            <button @click="navigateTo('/login'); isMenuOpen = false" class="block w-full text-left py-2 hover:text-saffron">Login</button>
+            <button @click="navigateTo('/register'); isMenuOpen = false" class="block w-full bg-saffron text-white px-4 py-2 rounded-md text-center">Register</button>
          </template>
          <template v-else>
             <div class="flex items-center space-x-2 py-2 border-t border-gray-100 mt-2 pt-2">
                 <img :src="authStore.userAvatar" class="w-8 h-8 rounded-full" />
                 <span class="font-bold">{{ authStore.user?.username }}</span>
             </div>
-            <button @click="handleLogout" class="block w-full text-left py-2 text-red-500">Logout</button>
+            <button @click="handleLogout(); isMenuOpen = false" class="block w-full text-left py-2 text-red-500">Logout</button>
          </template>
       </div>
     </nav>
@@ -212,24 +212,245 @@ onMounted(async () => {
     <!-- Main Content -->
     <main class="pt-16">
       <!-- Slogan Section -->
-      <section id="slogan" class="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        <img :src="slogan.image" alt="Background" class="absolute inset-0 w-full h-full object-cover opacity-90" />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-        <div class="relative z-10 text-center px-4 max-w-4xl">
-          <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">{{ slogan.text }}</h1>
-          <button @click="handleGetStarted" class="bg-india-green text-white text-xl px-8 py-3 rounded-full hover:bg-green-700 transition-transform hover:scale-105 shadow-xl animate-bounce">
-            Get Started Now
-          </button>
+      <section id="slogan" class="relative min-h-[85vh] flex items-center bg-navy-blue overflow-hidden">
+        <!-- Decorative Background Elements -->
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent skew-x-12 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-1/3 h-1/2 bg-gradient-to-t from-black/20 to-transparent rounded-tr-full pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6 h-full flex flex-col-reverse md:flex-row items-center relative z-10 py-12 md:py-0">
+          <!-- Left: Text Content -->
+          <div class="w-full md:w-1/2 text-left text-white z-20 md:pr-12 mt-10 md:mt-0 flex flex-col justify-center">
+            <div class="inline-block bg-saffron/20 text-saffron px-4 py-1 rounded-full text-sm font-semibold mb-6 w-fit border border-saffron/30 backdrop-blur-sm">
+              🚀 #1 YouTube Growth Service
+            </div>
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
+              {{ slogan.text }}
+            </h1>
+            <p class="text-gray-300 text-lg md:text-xl mb-10 max-w-xl leading-relaxed">
+              We provide authentic engagement to help you achieve your digital goals. Join thousands of creators growing with AutoLaK.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <button @click="handleGetStarted" class="bg-gradient-to-r from-saffron to-orange-600 text-white text-lg font-bold px-8 py-4 rounded-xl hover:shadow-lg hover:shadow-orange-500/30 transition-all transform hover:-translate-y-1">
+                  Get Started Now
+                </button>
+                <button @click="scrollToSection('intro')" class="bg-white/10 text-white border border-white/20 text-lg font-semibold px-8 py-4 rounded-xl hover:bg-white/20 transition-all">
+                  Learn More
+                </button>
+            </div>
+            
+            <!-- Stats Row -->
+            <div class="mt-12 flex items-center gap-8 border-t border-white/10 pt-8">
+                <div>
+                    <p class="text-3xl font-bold text-white">10k+</p>
+                    <p class="text-gray-400 text-sm">Happy Clients</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-white">5M+</p>
+                    <p class="text-gray-400 text-sm">Views Delivered</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-white">24/7</p>
+                    <p class="text-gray-400 text-sm">Support</p>
+                </div>
+            </div>
+          </div>
+          
+          <!-- Right: Image (Full Width/Height Style) -->
+          <div class="w-full md:w-1/2 h-[400px] md:h-[600px] relative z-10">
+             <!-- Abstract Shape Container -->
+             <div class="relative w-full h-full">
+                 <!-- Main Image with Mask -->
+                 <div class="absolute inset-0 md:-right-20 md:-top-10 md:-bottom-10 bg-white/5 rounded-3xl transform rotate-3 backdrop-blur-sm border border-white/10"></div>
+                 <div class="absolute inset-0 md:left-4 md:right-4 md:top-4 md:bottom-4 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                    <img :src="slogan.image" alt="Visual" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-1000" />
+                    <!-- Overlay Gradient -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy-blue/80 via-transparent to-transparent opacity-60"></div>
+                 </div>
+                 
+                 <!-- Floating Card 1 -->
+                 <div class="absolute top-10 -left-6 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl shadow-xl animate-bounce hidden md:block" style="animation-duration: 3s;">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">✓</div>
+                        <div>
+                            <p class="text-white font-bold text-sm">Order Completed</p>
+                            <p class="text-green-300 text-xs">+500 Subscribers</p>
+                        </div>
+                    </div>
+                 </div>
+
+                 <!-- Floating Card 2 -->
+                 <div class="absolute bottom-20 -right-4 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl shadow-xl animate-bounce hidden md:block" style="animation-duration: 4s; animation-delay: 1s;">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                             <Clock class="w-5 h-5" />
+                        </div>
+                        <div>
+                            <p class="text-white font-bold text-sm">Fast Delivery</p>
+                            <p class="text-blue-200 text-xs">Starts in 24h</p>
+                        </div>
+                    </div>
+                 </div>
+             </div>
+          </div>
         </div>
       </section>
 
       <!-- Intro Section -->
       <section id="intro" class="py-20 bg-white">
         <div class="container mx-auto px-4">
-          <h2 class="text-3xl font-bold text-center mb-12 text-navy-blue">How We Work</h2>
+          <h2 class="text-3xl font-bold text-center mb-12 text-navy-blue">The Complete Guide to YouTube SEO</h2>
           <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10">{{ intro.text }}</p>
-          <div class="w-full max-w-5xl mx-auto border-4 border-gray-100 rounded-xl overflow-hidden shadow-lg">
-             <img :src="intro.flowchart" alt="Process Flow" class="w-full" />
+          
+          <div class="max-w-7xl mx-auto pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-4 relative">
+                
+                <!-- Column 1: Preparation -->
+                <div class="flex flex-col gap-4 relative">
+                    <div class="bg-blue-50 text-blue-800 font-bold p-3 rounded text-center h-16 flex items-center justify-center border-b-2 border-blue-200">
+                        Preparation Phase
+                    </div>
+                    <div class="border-2 border-blue-400 rounded-lg p-3 bg-white shadow-sm relative">
+                        <span class="font-bold text-blue-600 mr-2">1.</span>
+                        <span class="font-semibold text-gray-800">Keyword Research</span>
+                        <ul class="text-xs text-gray-600 mt-2 list-disc list-inside">
+                            <li>Discover Trending Topics</li>
+                            <li>Analyze Search Intent</li>
+                            <li>Use Tools: Google Trends, VidIQ, TubeBuddy</li>
+                        </ul>
+                    </div>
+                    <div class="flex justify-center text-blue-500"><ChevronDown /></div>
+                    <div class="border-2 border-blue-400 rounded-lg p-3 bg-white shadow-sm relative">
+                        <span class="font-bold text-blue-600 mr-2">2.</span>
+                        <span class="font-semibold text-gray-800">Content Planning</span>
+                        <ul class="text-xs text-gray-600 mt-2 list-disc list-inside">
+                            <li>Create High-Retention Script</li>
+                            <li>Define Structure & Hook</li>
+                        </ul>
+                    </div>
+                    <!-- Mobile Flow Arrow -->
+                    <div class="md:hidden flex justify-center text-blue-300 py-2">
+                        <ChevronDown class="w-8 h-8 animate-bounce opacity-50" />
+                    </div>
+                </div>
+
+                <!-- Column 2: Production -->
+                <div class="flex flex-col gap-4 relative">
+                    <div class="bg-blue-50 text-blue-800 font-bold p-3 rounded text-center h-16 flex items-center justify-center border-b-2 border-blue-200">
+                        Production & File Optimization
+                    </div>
+                    <div class="border-2 border-blue-400 rounded-lg p-3 bg-white shadow-sm">
+                        <span class="font-bold text-blue-600 mr-2">3.</span>
+                        <span class="font-semibold text-gray-800">High-Quality Video</span>
+                        <ul class="text-xs text-gray-600 mt-2 list-disc list-inside">
+                            <li>Focus on Visuals & Audio</li>
+                            <li>Maintain Audience Engagement</li>
+                        </ul>
+                    </div>
+                    <div class="flex justify-center text-blue-500"><ChevronDown /></div>
+                    <div class="border-2 border-orange-300 rounded-lg p-3 bg-orange-50 shadow-sm">
+                        <span class="font-bold text-orange-600 mr-2">4.</span>
+                        <span class="font-semibold text-gray-800">File Optimization</span>
+                        <ul class="text-xs text-gray-600 mt-2 list-disc list-inside">
+                            <li>Include Keyword in Filename</li>
+                            <li>Use Relevant Metadata</li>
+                        </ul>
+                    </div>
+                    <!-- Mobile Flow Arrow -->
+                    <div class="md:hidden flex justify-center text-blue-300 py-2">
+                        <ChevronDown class="w-8 h-8 animate-bounce opacity-50" />
+                    </div>
+                </div>
+
+                <!-- Column 3: Upload -->
+                <div class="flex flex-col gap-4 relative">
+                    <div class="bg-blue-50 text-blue-800 font-bold p-3 rounded text-center h-16 flex items-center justify-center border-b-2 border-blue-200">
+                        Upload & Metadata Optimization
+                    </div>
+                    <div class="border-2 border-blue-400 rounded-lg p-3 bg-white shadow-sm">
+                        <span class="font-bold text-blue-600 mr-2">5.</span>
+                        <span class="font-semibold text-gray-800">Title Optimization</span>
+                        <p class="text-xs text-gray-600 mt-1">Include Primary Keyword, Click-Worthy</p>
+                    </div>
+                    <div class="border-2 border-blue-400 rounded-lg p-3 bg-white shadow-sm">
+                        <span class="font-bold text-blue-600 mr-2">6.</span>
+                        <span class="font-semibold text-gray-800">Description</span>
+                        <p class="text-xs text-gray-600 mt-1">Keywords in First 2-3 Sentences, Call-to-Action</p>
+                    </div>
+                    <div class="border-2 border-blue-400 rounded-lg p-3 bg-white shadow-sm">
+                        <span class="font-bold text-blue-600 mr-2">7.</span>
+                        <span class="font-semibold text-gray-800">Tags & Categories</span>
+                    </div>
+                    <div class="border-2 border-green-400 rounded-lg p-3 bg-green-50 shadow-sm">
+                        <span class="font-bold text-green-700 mr-2">8.</span>
+                        <span class="font-semibold text-gray-800">Thumbnail Design</span>
+                        <p class="text-xs text-gray-600 mt-1">High Contrast, Clear Text</p>
+                    </div>
+                    <div class="border-2 border-green-400 rounded-lg p-3 bg-green-50 shadow-sm">
+                        <span class="font-bold text-green-700 mr-2">9.</span>
+                        <span class="font-semibold text-gray-800">Cards & End Screens</span>
+                    </div>
+                    <div class="border-2 border-green-400 rounded-lg p-3 bg-green-50 shadow-sm">
+                        <span class="font-bold text-green-700 mr-2">10.</span>
+                        <span class="font-semibold text-gray-800">Captions & CC</span>
+                    </div>
+                    <!-- Mobile Flow Arrow -->
+                    <div class="md:hidden flex justify-center text-blue-300 py-2">
+                        <ChevronDown class="w-8 h-8 animate-bounce opacity-50" />
+                    </div>
+                </div>
+
+                <!-- Column 4: Post-Upload -->
+                <div class="flex flex-col gap-4 relative">
+                    <div class="bg-blue-50 text-blue-800 font-bold p-3 rounded text-center h-16 flex items-center justify-center border-b-2 border-blue-200">
+                        Post-Upload & Promotion
+                    </div>
+                    <div class="border-2 border-blue-400 rounded-lg p-3 bg-white shadow-sm">
+                        <span class="font-bold text-blue-600 mr-2">11.</span>
+                        <span class="font-semibold text-gray-800">Early Engagement</span>
+                        <p class="text-xs text-gray-600 mt-1">Reply to Comments, Pin Question</p>
+                    </div>
+                    <div class="flex justify-center text-blue-500"><ChevronDown /></div>
+                    <div class="border-2 border-blue-400 rounded-lg p-3 bg-white shadow-sm">
+                        <span class="font-bold text-blue-600 mr-2">12.</span>
+                        <span class="font-semibold text-gray-800">Promotion</span>
+                        <p class="text-xs text-gray-600 mt-1">Social Media, Email Marketing</p>
+                    </div>
+                    <div class="flex justify-center text-blue-500"><ChevronDown /></div>
+                    <div class="border-2 border-green-400 rounded-lg p-3 bg-green-50 shadow-sm">
+                        <span class="font-bold text-green-700 mr-2">13.</span>
+                        <span class="font-semibold text-gray-800">Playlist Strategy</span>
+                    </div>
+                    <!-- Mobile Flow Arrow -->
+                    <div class="md:hidden flex justify-center text-blue-300 py-2">
+                        <ChevronDown class="w-8 h-8 animate-bounce opacity-50" />
+                    </div>
+                </div>
+
+                <!-- Column 5: Analysis -->
+                <div class="flex flex-col gap-4 relative">
+                    <div class="bg-blue-50 text-blue-800 font-bold p-3 rounded text-center h-16 flex items-center justify-center border-b-2 border-blue-200">
+                        Analysis & Iteration
+                    </div>
+                    <div class="border-2 border-green-400 rounded-lg p-3 bg-white shadow-sm">
+                        <span class="font-bold text-green-700 mr-2">14.</span>
+                        <span class="font-semibold text-gray-800">Performance Tracking</span>
+                        <ul class="text-xs text-gray-600 mt-2 list-disc list-inside">
+                            <li>YouTube Analytics</li>
+                            <li>Key Metrics: CTR, Retention</li>
+                        </ul>
+                    </div>
+                    <div class="flex justify-center text-blue-500"><ChevronDown /></div>
+                    <div class="border-2 border-green-400 rounded-lg p-3 bg-green-50 shadow-sm">
+                        <span class="font-bold text-green-700 mr-2">15.</span>
+                        <span class="font-semibold text-gray-800">Strategy Adjustment</span>
+                        <ul class="text-xs text-gray-600 mt-2 list-disc list-inside">
+                            <li>Analyze Success/Failure</li>
+                            <li>Optimize Future Content</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
           </div>
         </div>
       </section>

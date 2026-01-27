@@ -253,6 +253,59 @@ const openArticleModal = (article: any = null) => {
     isArticleModalOpen.value = true;
 };
 
+const insertImageToArticle = () => {
+    const url = prompt("Enter image URL:");
+    if (url) {
+        const imageMarkdown = `![Image Alt](${url})`;
+        currentArticle.value.content = (currentArticle.value.content || '') + '\n' + imageMarkdown;
+    }
+};
+
+const handlePaste = async (event: ClipboardEvent) => {
+    const items = event.clipboardData?.items;
+    if (!items) return;
+
+    for (const item of items) {
+        if (item.type.indexOf('image') !== -1) {
+            event.preventDefault();
+            const file = item.getAsFile();
+            if (!file) continue;
+
+            // Upload image
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const authStore = useAuthStore();
+                const config = {
+                    headers: {
+                        'Authorization': `Token ${authStore.token}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                };
+                const response = await axios.post('http://localhost:8000/api/upload-image/', formData, config);
+                const imageUrl = response.data.url;
+                
+                // Insert markdown at cursor
+                const markdown = `![Image](${imageUrl})`;
+                const textarea = event.target as HTMLTextAreaElement;
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                
+                currentArticle.value.content = 
+                    currentArticle.value.content.substring(0, start) + 
+                    markdown + 
+                    currentArticle.value.content.substring(end);
+                
+                // Wait for Vue update then fix cursor position (optional but nice)
+            } catch (e) {
+                console.error("Failed to upload pasted image", e);
+                alert("Failed to upload pasted image.");
+            }
+        }
+    }
+};
+
 const saveArticle = async () => {
     try {
         const authStore = useAuthStore();
@@ -491,8 +544,17 @@ onMounted(() => {
                     <input v-model="currentArticle.title" class="w-full border p-2 rounded" />
                 </div>
                 <div>
-                    <label class="block text-gray-700 font-semibold">Content (Markdown Supported)</label>
-                    <textarea v-model="currentArticle.content" class="w-full border p-2 rounded h-64 font-mono" placeholder="# Heading\n\nWrite your article content here..."></textarea>
+                    <label class="block text-gray-700 font-semibold mb-2">Content (Markdown Supported)</label>
+                    <div class="flex gap-2 mb-2">
+                        <button @click="insertImageToArticle" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded text-sm flex items-center">
+                            🖼️ Insert Image URL
+                        </button>
+                    </div>
+                    <textarea 
+                        v-model="currentArticle.content" 
+                        @paste="handlePaste"
+                        class="w-full border p-2 rounded h-64 font-mono" 
+                        placeholder="# Heading\n\nWrite your article content here... Paste images directly!"></textarea>
                 </div>
             </div>
 

@@ -1,6 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import HomePageConfigViewSet, FAQViewSet, SEOArticleViewSet, AdminHomePageConfigViewSet, AdminFAQViewSet, AdminSystemConfigViewSet, AdminSEOArticleViewSet
+from .views import (
+    HomePageConfigViewSet, FAQViewSet, ImageUploadView, SEOArticleViewSet,
+    AdminHomePageConfigViewSet, AdminFAQViewSet, AdminSystemConfigViewSet, AdminSEOArticleViewSet
+)
 
 router = DefaultRouter()
 router.register(r'home-config', HomePageConfigViewSet)
@@ -13,4 +16,5 @@ router.register(r'admin/seo-articles', AdminSEOArticleViewSet, basename='admin-s
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('upload-image/', ImageUploadView.as_view(), name='image-upload'),
 ]
