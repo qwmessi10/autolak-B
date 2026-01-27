@@ -10,9 +10,20 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user).order_by('-created_at')
 
+    def create(self, request, *args, **kwargs):
+        print(f"Received create order request data: {request.data}")
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            print(f"Order validation failed: {serializer.errors}")
+            return Response(serializer.errors, status=400)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=201, headers=headers)
+
     def perform_create(self, serializer):
         order = serializer.save()
-        self.send_to_telegram(order)
+        # Temporarily disable Telegram to debug
+        # self.send_to_telegram(order)
 
     def send_to_telegram(self, order):
         import json

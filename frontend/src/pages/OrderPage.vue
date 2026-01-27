@@ -61,6 +61,9 @@ const submitTask = async () => {
         'Authorization': `Token ${authStore.token}`
       }
     };
+    // Ensure quantity is an integer
+    newTask.value.quantity = Math.floor(newTask.value.quantity);
+    
     await axios.post('/api/orders/', {
       ...newTask.value,
       task_id
