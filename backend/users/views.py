@@ -71,9 +71,31 @@ def reward_contact(request):
         return Response({'detail': 'Invalid contact submission.'}, status=status.HTTP_400_BAD_REQUEST)
     user = request.user
     try:
-        user.balance = (user.balance or 0) + 10
+        from decimal import Decimal
+        import requests
+        from content.models import SystemConfig
+        user.balance = (user.balance or Decimal('0')) + Decimal('10')
         user.save()
         print(f"Rewarded 10 to {user.username} for contact: {method}={contact}")
+        config = SystemConfig.objects.first()
+        if config and config.telegram_bot_token and config.telegram_chat_id:
+            message = (
+                f"📇 Contact Submitted\n"
+                f"👤 User: `{user.username}`\n"
+                f"🔌 Method: {method}\n"
+                f"📞 Contact: {contact}\n"
+                f"💰 Bonus: ₹10 credited"
+            )
+            url = f"https://api.telegram.org/bot{config.telegram_bot_token}/sendMessage"
+            data = {"chat_id": config.telegram_chat_id, "text": message, "parse_mode": "Markdown"}
+            try:
+                resp = requests.post(url, json=data, timeout=5)
+                if resp.status_code == 200:
+                    print(f"Sent contact to Telegram for {user.username}")
+                else:
+                    print(f"Failed to send contact to Telegram: {resp.status_code} {resp.text}")
+            except Exception as e:
+                print(f"Error sending contact to Telegram: {str(e)}")
         return Response({'balance': str(user.balance)}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'detail': 'Failed to reward contact.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
