@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'autolak_backend.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='mysql://root:root@localhost:3306/autolak',
+        default='mysql://root:root@127.0.0.1:3306/autolak',
         conn_max_age=600
     )
 }
@@ -92,6 +92,18 @@ DATABASES = {
 AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'ngrok-skip-browser-warning',
+]
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,http://localhost:8000,https://cherrie-calorific-niko.ngrok-free.dev').split(',')
 
 REST_FRAMEWORK = {

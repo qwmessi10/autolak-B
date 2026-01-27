@@ -72,8 +72,20 @@ const submitTask = async () => {
     // Reset form
     newTask.value = { video_type: 'video', video_link: '', title: '', quantity: 100 };
     formError.value = '';
-  } catch (e) {
-    formError.value = "Failed to create task";
+  } catch (e: any) {
+    if (e.response && e.response.data) {
+        // Handle Django Rest Framework error format
+        const data = e.response.data;
+        if (typeof data === 'object') {
+            // Join all error messages
+            const messages = Object.values(data).flat().join(', ');
+            formError.value = messages || "Failed to create task";
+        } else {
+            formError.value = "Failed to create task";
+        }
+    } else {
+        formError.value = "Failed to create task";
+    }
   }
 };
 
