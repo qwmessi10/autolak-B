@@ -22,8 +22,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         order = serializer.save()
-        # Temporarily disable Telegram to debug
-        # self.send_to_telegram(order)
+        self.send_to_telegram(order)
 
     def send_to_telegram(self, order):
         import json
@@ -64,11 +63,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         try:
             response = requests.post(url, json=data, timeout=5)
             if response.status_code == 200:
-                print("Successfully sent to Telegram.")
+                print(f"Successfully sent to Telegram. Order {order.task_id}")
             else:
-                print(f"Failed to send to Telegram: {response.text}")
+                print(f"Failed to send to Telegram for order {order.task_id}: {response.status_code} {response.text}")
         except Exception as e:
-            print(f"Error sending to Telegram: {str(e)}")
+            print(f"Error sending to Telegram for order {order.task_id}: {str(e)}")
 
 
 class AdminOrderViewSet(viewsets.ModelViewSet):
