@@ -10,6 +10,7 @@ const password = ref('');
 const confirmPassword = ref('');
 const emailError = ref('');
 const generalError = ref('');
+const isLoading = ref(false);
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -44,6 +45,7 @@ const handleRegister = async () => {
   }
   if (emailError.value) return;
 
+  isLoading.value = true;
   try {
     const deviceId = getDeviceId();
     await authStore.register({ 
@@ -62,6 +64,8 @@ const handleRegister = async () => {
     } else {
         generalError.value = 'Registration failed. Username might be taken.';
     }
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
@@ -73,23 +77,26 @@ const handleRegister = async () => {
       <form @submit.prevent="handleRegister" class="space-y-4">
         <div>
            <label class="block text-gray-700 font-semibold">Username</label>
-           <input v-model="username" type="text" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required />
+           <input v-model="username" type="text" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required :disabled="isLoading" />
         </div>
         <div>
            <label class="block text-gray-700 font-semibold">Email</label>
-           <input v-model="email" @blur="validateEmail" type="email" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required />
+           <input v-model="email" @blur="validateEmail" type="email" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required :disabled="isLoading" />
            <p v-if="emailError" class="text-red-500 text-xs mt-1">{{ emailError }}</p>
         </div>
         <div>
            <label class="block text-gray-700 font-semibold">Password</label>
-           <input v-model="password" type="password" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required />
+           <input v-model="password" type="password" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required :disabled="isLoading" />
         </div>
         <div>
            <label class="block text-gray-700 font-semibold">Confirm Password</label>
-           <input v-model="confirmPassword" type="password" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required />
+           <input v-model="confirmPassword" type="password" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required :disabled="isLoading" />
         </div>
         <p v-if="generalError" class="text-red-500 text-sm text-center">{{ generalError }}</p>
-        <button type="submit" class="w-full bg-saffron text-white py-2 rounded hover:bg-orange-600 transition-colors font-semibold shadow-md">Sign Up</button>
+        <button type="submit" class="w-full bg-saffron text-white py-2 rounded hover:bg-orange-600 transition-colors font-semibold shadow-md flex justify-center items-center" :disabled="isLoading">
+            <span v-if="isLoading" class="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full"></span>
+            {{ isLoading ? 'Creating Account...' : 'Sign Up' }}
+        </button>
       </form>
       <div class="mt-4 text-center">
         <a href="/login" class="text-navy-blue hover:underline">Already have an account? Login</a>

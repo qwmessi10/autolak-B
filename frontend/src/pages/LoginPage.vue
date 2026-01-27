@@ -8,8 +8,11 @@ const password = ref('');
 const authStore = useAuthStore();
 const router = useRouter();
 const error = ref('');
+const isLoading = ref(false);
 
 const handleLogin = async () => {
+  error.value = '';
+  isLoading.value = true;
   try {
     await authStore.login({ username: username.value, password: password.value });
     if (authStore.isAdmin) {
@@ -19,6 +22,8 @@ const handleLogin = async () => {
     }
   } catch (e) {
     error.value = 'Invalid credentials';
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
@@ -30,14 +35,17 @@ const handleLogin = async () => {
       <form @submit.prevent="handleLogin" class="space-y-4">
         <div>
            <label class="block text-gray-700 font-semibold">Username</label>
-           <input v-model="username" type="text" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required />
+           <input v-model="username" type="text" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required :disabled="isLoading" />
         </div>
         <div>
            <label class="block text-gray-700 font-semibold">Password</label>
-           <input v-model="password" type="password" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required />
+           <input v-model="password" type="password" class="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-saffron outline-none transition-all" required :disabled="isLoading" />
         </div>
         <p v-if="error" class="text-red-500 text-sm text-center">{{ error }}</p>
-        <button type="submit" class="w-full bg-saffron text-white py-2 rounded hover:bg-orange-600 transition-colors font-semibold shadow-md">Login</button>
+        <button type="submit" class="w-full bg-saffron text-white py-2 rounded hover:bg-orange-600 transition-colors font-semibold shadow-md flex justify-center items-center" :disabled="isLoading">
+            <span v-if="isLoading" class="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-white rounded-full"></span>
+            {{ isLoading ? 'Logging in...' : 'Login' }}
+        </button>
       </form>
       <div class="mt-4 text-center">
         <a href="/register" class="text-navy-blue hover:underline">Create an account</a>

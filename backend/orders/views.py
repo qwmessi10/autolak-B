@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from .models import Order
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer, AdminOrderSerializer
 from rest_framework.response import Response
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -62,5 +62,20 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 class AdminOrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().order_by('-created_at')
-    serializer_class = OrderSerializer
+    serializer_class = AdminOrderSerializer
     permission_classes = [permissions.IsAdminUser]
+
+    def perform_update(self, serializer):
+        # Handle refund logic if status changes to 'failed'
+        instance = self.get_object()
+        old_status = instance.status
+        
+        updated_order = serializer.save()
+        
+        if updated_order.status == 'failed' and old_status != 'failed':
+            # Refund the user
+            refund_amount = updated_order.quantity * 2 # 2 Rupees per task
+            user = updated_order.user
+            user.balance += refund_amount
+            user.save()
+            print(f"Refunded {refund_amount} to user {user.username} for order {updated_order.task_id}")

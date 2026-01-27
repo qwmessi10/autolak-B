@@ -61,6 +61,7 @@ const cases = ref([
   { id: 3, img: "https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=YouTube%20Channel%20Screenshot%20Tech%20Review%20Growth&image_size=landscape_16_9", text: "Tech Reviews Organic Growth" },
   { id: 4, img: "https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=YouTube%20Channel%20Screenshot%20Music%20Video%20Trending&image_size=landscape_16_9", text: "Music Video Trending #1" },
 ]);
+const caseSummary = ref("Our success stories (and more...)");
 
 const faqs = ref([
   { q: "Is this safe?", a: "Yes, we use 100% real interactions." },
@@ -72,11 +73,25 @@ onMounted(async () => {
     try {
         const res = await axios.get('http://localhost:8000/api/home-config/');
         if (res.data && res.data.length > 0) {
-            const config = res.data[0];
-            slogan.value.text = config.slogan_text || slogan.value.text;
+            // The API returns an array, but we usually only care about the first active config
+            // Since we are creating/editing config, we might have multiple if not handled strictly as singleton
+            // Let's take the last one (most recently created) or first one. 
+            // AdminPage uses ID, implying one row. 
+            
+            // Let's assume we want the *latest* config if multiple exist, or just the first.
+            // If the Admin page edits a specific ID, we should probably fetch that specific one or just the latest.
+            // Given the Admin logic edits `res.data[0]` if exists, let's stick to index 0 but ensure it's not stale.
+            
+            // Actually, let's look at how AdminPage fetches: `homeRes.data[0]`.
+            // If multiple configs are created via POST, we might be seeing an old one here if we pick [0] and it's not ordered by -id.
+            // But let's check the fields.
+            
+            const config = res.data[0]; 
+            
+            if (config.slogan_text) slogan.value.text = config.slogan_text;
             if (config.slogan_image) slogan.value.image = config.slogan_image;
             
-            intro.value.text = config.intro_text || intro.value.text;
+            if (config.intro_text) intro.value.text = config.intro_text;
             if (config.intro_flowchart) intro.value.flowchart = config.intro_flowchart;
             
             // Map cases if images exist, otherwise keep default
@@ -84,8 +99,14 @@ onMounted(async () => {
             if (config.case_2_img) cases.value[1].img = config.case_2_img;
             if (config.case_3_img) cases.value[2].img = config.case_3_img;
             if (config.case_4_img) cases.value[3].img = config.case_4_img;
-            // Note: DB model has single case_text, assuming shared or ignored for now
-        }
+            
+            // Map case text to all cases or a specific area? 
+             // The template uses `cases[0].text` for the footer note. 
+             // Let's update that footer note text from `case_text`.
+             if (config.case_text) {
+                 caseSummary.value = config.case_text;
+             }
+         }
         
         const faqRes = await axios.get('http://localhost:8000/api/faqs/');
         if (faqRes.data && faqRes.data.length > 0) {
@@ -101,14 +122,14 @@ onMounted(async () => {
   <div class="min-h-screen bg-gray-50 font-sans text-gray-800">
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-white shadow-md z-50">
-      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="w-full px-6 py-3 flex justify-between items-center">
         <!-- Logo -->
-        <div class="text-2xl font-bold text-saffron tracking-wider font-serif">
+        <div class="text-2xl font-bold text-saffron tracking-wider font-serif flex-shrink-0">
           AutoLaK <span class="text-navy-blue">SEO</span>
         </div>
 
         <!-- Desktop Menu -->
-        <div class="hidden md:flex space-x-6 items-center">
+        <div class="hidden md:flex space-x-6 items-center flex-grow justify-end">
           <div class="relative group">
             <button class="flex items-center hover:text-saffron transition-colors py-2">
               Navigation <ChevronDown class="w-4 h-4 ml-1" />
@@ -229,7 +250,7 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-          <p class="text-center mt-12 text-gray-500 italic">{{ cases[0].text }} (and more...)</p>
+          <p class="text-center mt-12 text-gray-500 italic">{{ caseSummary }}</p>
         </div>
       </section>
 

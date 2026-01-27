@@ -10,10 +10,14 @@ onMounted(async () => {
   if (authStore.isAuthenticated) {
     try {
       await authStore.fetchProfile();
-    } catch (e) {
-      // Token invalid or session expired
-      authStore.logout();
-      router.push('/login');
+    } catch (e: any) {
+      // Only logout if it's a 401 Unauthorized or 403 Forbidden
+      if (e.response && (e.response.status === 401 || e.response.status === 403)) {
+         authStore.logout();
+         router.push('/login');
+      } else {
+         console.warn("Fetch profile failed but keeping session:", e);
+      }
     }
   }
 });

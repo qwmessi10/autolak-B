@@ -9,6 +9,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'balance', 'is_staff', 'avatar_url')
         read_only_fields = ('balance', 'is_staff', 'avatar_url')
 
+class AdminUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'balance', 'is_staff', 'avatar_url')
+        read_only_fields = ('id', 'username', 'email', 'avatar_url') # Allow balance and is_staff to be edited by admin
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
     confirm_password = serializers.CharField(write_only=True)

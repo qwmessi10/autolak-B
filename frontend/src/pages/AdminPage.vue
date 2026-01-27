@@ -91,11 +91,14 @@ const openUserModal = async (user: any) => {
               'Authorization': `Token ${authStore.token}`
           }
       };
-      const response = await axios.get('http://localhost:8000/api/orders/admin/orders/', config); 
+      // Correct endpoint for fetching admin orders: /api/admin/orders/
+      // The router maps 'admin/orders' under 'api/', so it becomes /api/admin/orders/
+      const response = await axios.get('http://localhost:8000/api/admin/orders/', config); 
       userTasks.value = response.data.filter((o: any) => o.user === user.id);
       isUserModalOpen.value = true;
   } catch (e) {
       console.error("Failed to fetch tasks", e);
+      alert("Failed to load user tasks. Please check console for details.");
   }
 };
 
@@ -138,7 +141,8 @@ const performUpdateStatus = async (task: any, status: string, reason: string = '
                 'Authorization': `Token ${authStore.token}`
             }
         };
-        await axios.patch(`http://localhost:8000/api/orders/admin/orders/${task.id}/`, {
+        // Update endpoint to /api/admin/orders/
+        await axios.patch(`http://localhost:8000/api/admin/orders/${task.id}/`, {
             status: status,
             fail_reason: reason
         }, config);
@@ -156,23 +160,32 @@ const performUpdateStatus = async (task: any, status: string, reason: string = '
 const saveHomeConfig = async () => {
     try {
         const authStore = useAuthStore();
+        // Remove 'Content-Type' header to let browser set it with boundary
+        // BUT for simple JSON data, we should use application/json.
+        // The issue is mixing multipart/form-data logic with JSON logic.
+        // If we are just sending text, we should send JSON.
+        
+        // Ensure we are sending a clean object
+        const payload = {
+            slogan_text: homeConfig.value.slogan_text,
+            intro_text: homeConfig.value.intro_text,
+            case_text: homeConfig.value.case_text
+        };
+
         const config = {
             headers: {
-                'Authorization': `Token ${authStore.token}`,
-                'Content-Type': 'multipart/form-data' // Important if images, but we used JSON so far. Let's stick to default if just text, but axios handles object well.
+                'Authorization': `Token ${authStore.token}`
             }
         };
-        // Note: For image uploads we need FormData.
-        // Assuming current implementation is text-only for simplicity based on provided code.
-        // If image upload is needed, we must use FormData.
         
         if (homeConfig.value.id) {
-            await axios.patch(`http://localhost:8000/api/admin/home-config/${homeConfig.value.id}/`, homeConfig.value, config);
+            await axios.patch(`http://localhost:8000/api/admin/home-config/${homeConfig.value.id}/`, payload, config);
         } else {
-            await axios.post('http://localhost:8000/api/admin/home-config/', homeConfig.value, config);
+            await axios.post('http://localhost:8000/api/admin/home-config/', payload, config);
         }
         alert("Homepage config saved!");
     } catch (e) {
+        console.error("Error saving home config", e);
         alert("Error saving home config");
     }
 };

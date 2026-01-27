@@ -25,10 +25,16 @@ const formError = ref('');
 
 const fetchOrders = async () => {
   try {
-    const response = await axios.get('http://localhost:8000/api/orders/');
+    const config = {
+      headers: {
+        'Authorization': `Token ${authStore.token}`
+      }
+    };
+    const response = await axios.get('http://localhost:8000/api/orders/', config);
     orders.value = response.data;
   } catch (e) {
     console.error(e);
+    // Don't auto logout on simple fetch failure, let App.vue handle token validity or user manual logout
   }
 };
 
@@ -50,10 +56,15 @@ const submitTask = async () => {
 
   try {
     const task_id = 'TASK-' + Date.now();
+    const config = {
+      headers: {
+        'Authorization': `Token ${authStore.token}`
+      }
+    };
     await axios.post('http://localhost:8000/api/orders/', {
       ...newTask.value,
       task_id
-    });
+    }, config);
     isModalOpen.value = false;
     await fetchOrders();
     // Refresh profile to update balance
@@ -206,8 +217,8 @@ onMounted(() => {
           <h3 class="text-xl font-bold mb-4 text-navy-blue">Recharge Balance</h3>
           <p class="text-gray-600 mb-6">Please contact customer support to recharge your wallet.</p>
           <div class="space-y-3">
-             <a href="https://telegram.org" target="_blank" class="block w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Contact via Telegram</a>
-             <a href="https://whatsapp.com" target="_blank" class="block w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">Contact via WhatsApp</a>
+             <a href="https://t.me/AutoLakBSOfficial/5" target="_blank" class="block w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Contact via Telegram</a>
+             <a href="https://wa.me/601169686094" target="_blank" class="block w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">Contact via WhatsApp</a>
           </div>
           <button @click="isRechargeModalOpen = false" class="mt-4 text-gray-500 hover:text-gray-700">Close</button>
        </div>
