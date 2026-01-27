@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async login(credentials: any) {
-      const response = await axios.post('http://localhost:8000/api/users/login/', credentials)
+      const response = await axios.post('/api/users/login/', credentials)
       this.token = response.data.token
       this.user = {
         id: response.data.user_id,
@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', {
       axios.defaults.headers.common['Authorization'] = `Token ${this.token}`
     },
     async register(credentials: any) {
-      await axios.post('http://localhost:8000/api/users/register/', credentials)
+      await axios.post('/api/users/register/', credentials)
     },
     logout() {
       this.token = null

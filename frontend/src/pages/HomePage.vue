@@ -44,6 +44,14 @@ const openExternalLink = (url: string) => {
     window.open(url, '_blank');
 };
 
+const getFullUrl = (url: string) => {
+    if (url && url.startsWith('/')) {
+         const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+         return `${baseUrl}${url}`;
+    }
+    return url;
+};
+
 // Data
 const slogan = ref({
   text: "Boost Your YouTube Channel with AutoLaK",
@@ -71,7 +79,7 @@ const faqs = ref([
 
 onMounted(async () => {
     try {
-        const res = await axios.get('http://localhost:8000/api/home-config/');
+        const res = await axios.get('/api/home-config/');
         if (res.data && res.data.length > 0) {
             // The API returns an array, but we usually only care about the first active config
             // Since we are creating/editing config, we might have multiple if not handled strictly as singleton
@@ -89,16 +97,16 @@ onMounted(async () => {
             const config = res.data[0]; 
             
             if (config.slogan_text) slogan.value.text = config.slogan_text;
-            if (config.slogan_image) slogan.value.image = config.slogan_image;
+            if (config.slogan_image) slogan.value.image = getFullUrl(config.slogan_image);
             
             if (config.intro_text) intro.value.text = config.intro_text;
-            if (config.intro_flowchart) intro.value.flowchart = config.intro_flowchart;
+            if (config.intro_flowchart) intro.value.flowchart = getFullUrl(config.intro_flowchart);
             
             // Map cases if images exist, otherwise keep default
-            if (config.case_1_img) cases.value[0].img = config.case_1_img;
-            if (config.case_2_img) cases.value[1].img = config.case_2_img;
-            if (config.case_3_img) cases.value[2].img = config.case_3_img;
-            if (config.case_4_img) cases.value[3].img = config.case_4_img;
+            if (config.case_1_img) cases.value[0].img = getFullUrl(config.case_1_img);
+            if (config.case_2_img) cases.value[1].img = getFullUrl(config.case_2_img);
+            if (config.case_3_img) cases.value[2].img = getFullUrl(config.case_3_img);
+            if (config.case_4_img) cases.value[3].img = getFullUrl(config.case_4_img);
             
             // Map case text to all cases or a specific area? 
              // The template uses `cases[0].text` for the footer note. 

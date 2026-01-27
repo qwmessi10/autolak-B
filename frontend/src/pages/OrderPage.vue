@@ -30,7 +30,7 @@ const fetchOrders = async () => {
         'Authorization': `Token ${authStore.token}`
       }
     };
-    const response = await axios.get('http://localhost:8000/api/orders/', config);
+    const response = await axios.get('/api/orders/', config);
     orders.value = response.data;
   } catch (e) {
     console.error(e);

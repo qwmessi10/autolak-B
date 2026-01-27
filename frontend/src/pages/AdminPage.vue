@@ -45,7 +45,7 @@ const fetchUsers = async () => {
           }
       };
       console.log("Requesting users with token:", authStore.token);
-      const response = await axios.get('http://localhost:8000/api/users/admin/users/', config);
+      const response = await axios.get('/api/users/admin/users/', config);
       console.log('Fetched users:', response.data);
       users.value = response.data;
   } catch (e: any) {
@@ -59,22 +59,22 @@ const fetchUsers = async () => {
 const fetchConfig = async () => {
     try {
         // Home Config
-        const homeRes = await axios.get('http://localhost:8000/api/home-config/');
+        const homeRes = await axios.get('/api/home-config/');
         if (homeRes.data.length > 0) {
             homeConfig.value = homeRes.data[0];
         }
         // FAQs
-        const faqRes = await axios.get('http://localhost:8000/api/faqs/');
+        const faqRes = await axios.get('/api/faqs/');
         faqs.value = faqRes.data;
         
         // System Config
-        const sysRes = await axios.get('http://localhost:8000/api/admin/system-config/');
+        const sysRes = await axios.get('/api/admin/system-config/');
         if (sysRes.data.length > 0) {
             systemConfig.value = sysRes.data[0];
         }
         
         // SEO Articles
-        const seoRes = await axios.get('http://localhost:8000/api/admin/seo-articles/');
+        const seoRes = await axios.get('/api/admin/seo-articles/');
         seoArticles.value = seoRes.data;
     } catch (e) {
         console.error("Failed to fetch configs", e);
@@ -93,7 +93,7 @@ const openUserModal = async (user: any) => {
       };
       // Correct endpoint for fetching admin orders: /api/admin/orders/
       // The router maps 'admin/orders' under 'api/', so it becomes /api/admin/orders/
-      const response = await axios.get('http://localhost:8000/api/admin/orders/', config); 
+      const response = await axios.get('/api/admin/orders/', config); 
       userTasks.value = response.data.filter((o: any) => o.user === user.id);
       isUserModalOpen.value = true;
   } catch (e) {
@@ -110,7 +110,7 @@ const updateUser = async () => {
                 'Authorization': `Token ${authStore.token}`
             }
         };
-        await axios.patch(`http://localhost:8000/api/users/admin/users/${selectedUser.value.id}/`, {
+        await axios.patch(`/api/users/admin/users/${selectedUser.value.id}/`, {
             balance: selectedUser.value.balance
         }, config);
         isUserModalOpen.value = false;
@@ -179,9 +179,9 @@ const saveHomeConfig = async () => {
         };
         
         if (homeConfig.value.id) {
-            await axios.patch(`http://localhost:8000/api/admin/home-config/${homeConfig.value.id}/`, payload, config);
+            await axios.patch(`/api/admin/home-config/${homeConfig.value.id}/`, payload, config);
         } else {
-            await axios.post('http://localhost:8000/api/admin/home-config/', payload, config);
+            await axios.post('/api/admin/home-config/', payload, config);
         }
         alert("Homepage config saved!");
     } catch (e) {
@@ -199,9 +199,9 @@ const saveSystemConfig = async () => {
             }
         };
         if (systemConfig.value.id) {
-            await axios.patch(`http://localhost:8000/api/admin/system-config/${systemConfig.value.id}/`, systemConfig.value, config);
+            await axios.patch(`/api/admin/system-config/${systemConfig.value.id}/`, systemConfig.value, config);
         } else {
-            const res = await axios.post('http://localhost:8000/api/admin/system-config/', systemConfig.value, config);
+            const res = await axios.post('/api/admin/system-config/', systemConfig.value, config);
             systemConfig.value = res.data; // update with ID
         }
         alert("System config saved!");
@@ -222,7 +222,7 @@ const addFAQ = async () => {
                     'Authorization': `Token ${authStore.token}`
                 }
             };
-            await axios.post('http://localhost:8000/api/admin/faqs/', { question: q, answer: a }, config);
+            await axios.post('/api/admin/faqs/', { question: q, answer: a }, config);
             fetchConfig(); // refresh
         } catch(e) { alert("Failed to add FAQ"); }
     }
@@ -278,7 +278,7 @@ const handlePaste = async (event: ClipboardEvent) => {
                         'Content-Type': 'multipart/form-data'
                     }
                 };
-                const response = await axios.post('http://localhost:8000/api/upload-image/', formData, config);
+                const response = await axios.post('/api/upload-image/', formData, config);
                 const imageUrl = response.data.url;
                 
                 // Insert markdown at cursor
@@ -310,9 +310,9 @@ const saveArticle = async () => {
             }
         };
         if (currentArticle.value.id) {
-            await axios.patch(`http://localhost:8000/api/admin/seo-articles/${currentArticle.value.id}/`, currentArticle.value, config);
+            await axios.patch(`/api/admin/seo-articles/${currentArticle.value.id}/`, currentArticle.value, config);
         } else {
-            await axios.post('http://localhost:8000/api/admin/seo-articles/', currentArticle.value, config);
+            await axios.post('/api/admin/seo-articles/', currentArticle.value, config);
         }
         isArticleModalOpen.value = false;
         fetchConfig();
@@ -330,7 +330,7 @@ const deleteArticle = async (id: number) => {
                     'Authorization': `Token ${authStore.token}`
                 }
             };
-            await axios.delete(`http://localhost:8000/api/admin/seo-articles/${id}/`, config);
+            await axios.delete(`/api/admin/seo-articles/${id}/`, config);
             fetchConfig();
         } catch(e) { alert("Failed to delete article"); }
     }

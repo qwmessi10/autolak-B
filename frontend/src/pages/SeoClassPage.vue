@@ -35,7 +35,8 @@ const closeArticle = () => {
 const getCoverImage = (article: any) => {
     if (article.cover_image) {
         if (article.cover_image.startsWith('/')) {
-            return `http://localhost:8000${article.cover_image}`;
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            return `${baseUrl}${article.cover_image}`;
         }
         return article.cover_image;
     }
