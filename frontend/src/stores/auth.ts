@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
       if (!this.token) return
       try {
         axios.defaults.headers.common['Authorization'] = `Token ${this.token}`
-        const response = await axios.get('http://localhost:8000/api/users/profile/')
+        const response = await axios.get('/api/users/profile/')
         // Ensure we keep the token and just update user details
         this.user = {
             ...this.user,

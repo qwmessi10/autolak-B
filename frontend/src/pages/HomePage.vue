@@ -108,7 +108,7 @@ onMounted(async () => {
              }
          }
         
-        const faqRes = await axios.get('http://localhost:8000/api/faqs/');
+        const faqRes = await axios.get('/api/faqs/');
         if (faqRes.data && faqRes.data.length > 0) {
             faqs.value = faqRes.data.map((f: any) => ({ q: f.question, a: f.answer }));
         }

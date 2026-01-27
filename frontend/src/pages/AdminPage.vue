@@ -142,7 +142,7 @@ const performUpdateStatus = async (task: any, status: string, reason: string = '
             }
         };
         // Update endpoint to /api/admin/orders/
-        await axios.patch(`http://localhost:8000/api/admin/orders/${task.id}/`, {
+        await axios.patch(`/api/admin/orders/${task.id}/`, {
             status: status,
             fail_reason: reason
         }, config);
@@ -229,18 +229,13 @@ const addFAQ = async () => {
 };
 
 const deleteFAQ = async (id: number) => {
-    if(confirm("Delete this FAQ?")) {
-        try {
-            const authStore = useAuthStore();
-            const config = {
-                headers: {
-                    'Authorization': `Token ${authStore.token}`
-                }
-            };
-            await axios.delete(`http://localhost:8000/api/admin/faqs/${id}/`, config);
-            fetchConfig();
-        } catch(e) { alert("Failed to delete FAQ"); }
-    }
+    if (!confirm("Delete this FAQ?")) return;
+    try {
+        const config = { headers: { 'Authorization': `Token ${authStore.token}` } };
+        await axios.delete(`/api/admin/faqs/${id}/`, config);
+        const faqRes = await axios.get('/api/admin/faqs/', config);
+        faqs.value = faqRes.data;
+    } catch (e) { alert("Failed to delete FAQ"); }
 };
 
 // --- SEO Class Management ---

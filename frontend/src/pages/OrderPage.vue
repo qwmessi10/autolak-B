@@ -61,7 +61,7 @@ const submitTask = async () => {
         'Authorization': `Token ${authStore.token}`
       }
     };
-    await axios.post('http://localhost:8000/api/orders/', {
+    await axios.post('/api/orders/', {
       ...newTask.value,
       task_id
     }, config);

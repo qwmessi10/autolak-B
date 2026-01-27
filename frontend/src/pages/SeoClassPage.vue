@@ -11,7 +11,7 @@ const selectedArticle = ref<any>(null);
 
 onMounted(async () => {
     try {
-        const response = await axios.get('http://localhost:8000/api/seo-articles/');
+        const response = await axios.get('/api/seo-articles/');
         articles.value = response.data;
     } catch (e) {
         console.error("Failed to fetch articles", e);
