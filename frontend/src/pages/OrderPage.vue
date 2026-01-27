@@ -12,6 +12,9 @@ const orders = ref<any[]>([]);
 const isModalOpen = ref(false);
 const isRechargeModalOpen = ref(false);
 const isDetailModalOpen = ref(false);
+const isContactModalOpen = ref(false);
+const contactMethod = ref<'whatsapp' | 'telegram'>('whatsapp');
+const contactValue = ref('');
 const selectedOrder = ref<any>(null);
 
 const newTask = ref({
@@ -72,6 +75,8 @@ const submitTask = async () => {
     await fetchOrders();
     // Refresh profile to update balance
     await authStore.fetchProfile();
+    // Open contact modal for bonus
+    isContactModalOpen.value = true;
     // Reset form
     newTask.value = { video_type: 'video', video_link: '', title: '', quantity: 100 };
     formError.value = '';
@@ -89,6 +94,25 @@ const submitTask = async () => {
     } else {
         formError.value = "Failed to create task";
     }
+  }
+};
+
+const submitContact = async () => {
+  if (!contactValue.value) return;
+  try {
+    const config = {
+      headers: { 'Authorization': `Token ${authStore.token}` }
+    };
+    await axios.post('/api/users/reward-contact/', {
+      method: contactMethod.value,
+      contact: contactValue.value
+    }, config);
+    isContactModalOpen.value = false;
+    await authStore.fetchProfile();
+    alert('Thanks! ₹10 has been credited to your wallet.');
+    contactValue.value = '';
+  } catch (e) {
+    alert('Failed to submit contact');
   }
 };
 
@@ -226,6 +250,28 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- Contact Bonus Modal -->
+    <div v-if="isContactModalOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-sm p-6">
+        <h3 class="text-xl font-bold mb-4 text-navy-blue">Get ₹10 Bonus</h3>
+        <p class="text-gray-600 mb-4">Leave your contact and get ₹10 credited.</p>
+        <div class="space-y-3">
+          <div class="flex space-x-4">
+            <label class="flex items-center">
+              <input type="radio" v-model="contactMethod" value="whatsapp" class="mr-2"> WhatsApp
+            </label>
+            <label class="flex items-center">
+              <input type="radio" v-model="contactMethod" value="telegram" class="mr-2"> Telegram
+            </label>
+          </div>
+          <input v-model="contactValue" class="w-full border p-2 rounded" :placeholder="contactMethod==='whatsapp' ? '+60...' : '@username or chat id'">
+          <div class="flex justify-end space-x-2 pt-2">
+            <button @click="isContactModalOpen = false" class="px-3 py-1 rounded bg-gray-200 text-gray-700">Skip</button>
+            <button @click="submitContact" class="px-3 py-1 rounded bg-saffron text-white">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Recharge Modal -->
     <div v-if="isRechargeModalOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
        <div class="bg-white rounded-lg shadow-xl w-full max-w-sm p-6 text-center">

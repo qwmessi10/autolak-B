@@ -52,9 +52,9 @@ const getFullUrl = (url: string) => {
     return url;
 };
 
-// Data
+// Data-前端图片
 const slogan = ref({
-  text: "Boost Your YouTube Channel with AutoLaK",
+  text: "",
   image: "https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=India%20YouTube%20Growth%20Success%20Digital%20Marketing%20South%20Asian%20Business&image_size=landscape_16_9"
 });
 

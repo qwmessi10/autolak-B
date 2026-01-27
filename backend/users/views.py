@@ -1,4 +1,5 @@
 from rest_framework import generics, status, permissions, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -60,3 +61,19 @@ class AdminUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminUserSerializer
     permission_classes = [permissions.IsAdminUser]
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def reward_contact(request):
+    method = request.data.get('method')
+    contact = request.data.get('contact')
+    if method not in ['whatsapp', 'telegram'] or not contact:
+        return Response({'detail': 'Invalid contact submission.'}, status=status.HTTP_400_BAD_REQUEST)
+    user = request.user
+    try:
+        user.balance = (user.balance or 0) + 10
+        user.save()
+        print(f"Rewarded 10 to {user.username} for contact: {method}={contact}")
+        return Response({'balance': str(user.balance)}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'detail': 'Failed to reward contact.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
