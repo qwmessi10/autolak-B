@@ -6,7 +6,11 @@ import { createPinia } from 'pinia'
 import axios from 'axios'
 
 // Set global base URL for axios
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const rawBase = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+axios.defaults.baseURL =
+  (window.location.protocol === 'https:' && rawBase.startsWith('http://'))
+    ? rawBase.replace('http://', 'https://')
+    : rawBase;
 // Bypass ngrok browser warning for free accounts
 axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'true';
 

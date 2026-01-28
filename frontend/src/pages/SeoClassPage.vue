@@ -36,7 +36,14 @@ const getCoverImage = (article: any) => {
     if (article.cover_image) {
         if (article.cover_image.startsWith('/')) {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-            return `${baseUrl}${article.cover_image}`;
+            const normalized =
+              (window.location.protocol === 'https:' && baseUrl.startsWith('http://'))
+                ? baseUrl.replace('http://', 'https://')
+                : baseUrl;
+            return `${normalized}${article.cover_image}`;
+        }
+        if (window.location.protocol === 'https:' && article.cover_image.startsWith('http://')) {
+            return article.cover_image.replace('http://', 'https://');
         }
         return article.cover_image;
     }

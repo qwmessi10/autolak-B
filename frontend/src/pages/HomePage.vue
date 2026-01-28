@@ -47,7 +47,14 @@ const openExternalLink = (url: string) => {
 const getFullUrl = (url: string) => {
     if (url && url.startsWith('/')) {
          const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-         return `${baseUrl}${url}`;
+         const normalized =
+            (window.location.protocol === 'https:' && baseUrl.startsWith('http://'))
+              ? baseUrl.replace('http://', 'https://')
+              : baseUrl;
+         return `${normalized}${url}`;
+    }
+    if (window.location.protocol === 'https:' && url?.startsWith('http://')) {
+        return url.replace('http://', 'https://');
     }
     return url;
 };
