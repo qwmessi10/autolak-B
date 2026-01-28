@@ -25,7 +25,7 @@
     ```
 2.  创建/激活虚拟环境：
     ```powershell
-    python -m venv venv
+    python -m venv venv 
     .\venv\Scripts\activate
     ```
 3.  安装依赖：
@@ -52,6 +52,25 @@
     python manage.py runserver
     ```
     *   API 地址: `http://localhost:8000`
+
+### 使用 Ngrok 暴露本地后端（供 Vercel 前端访问）
+- 下载并安装： https://ngrok.com/download
+- 登录授权（仅一次）：
+  ```powershell
+  ngrok config add-authtoken <你的NGROK_TOKEN>
+  ```
+- 启动隧道（把本地后端 8000 端口暴露到公网）：
+  ```powershell
+  ngrok http 8000
+  ```
+- 复制生成的公网地址（例如 `https://xxxx-xxxx.ngrok-free.dev`）
+- 在 Vercel → 项目 → Settings → Environment Variables：
+  - 设置 `VITE_API_URL` = `https://xxxx-xxxx.ngrok-free.dev`
+  - 点击 Redeploy 重新部署前端，使环境变量生效
+- 后端安全说明：
+  - 已允许 CORS 和 `ngrok-skip-browser-warning` 头
+  - 建议将你的 Vercel 域名加入 `CSRF_TRUSTED_ORIGINS`（例如 `https://your-project.vercel.app`）
+  - 免费版 ngrok 域名每次重启都会变化，请更新 `VITE_API_URL` 并重新部署前端
 
 ### 前端设置 (Frontend)
 1.  进入前端文件夹：

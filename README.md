@@ -53,6 +53,25 @@
     ```
     *   API runs at: `http://localhost:8000`
 
+### Ngrok Tunnel (Expose Backend to Vercel)
+- Install Ngrok: https://ngrok.com/download
+- Authenticate (once):
+  ```powershell
+  ngrok config add-authtoken <YOUR_NGROK_TOKEN>
+  ```
+- Start tunnel for backend:
+  ```powershell
+  ngrok http 8000
+  ```
+- Copy the public URL (e.g. `https://xxxx-xxxx.ngrok-free.dev`)
+- In Vercel → Project → Settings → Environment Variables:
+  - Set `VITE_API_URL` = `https://xxxx-xxxx.ngrok-free.dev`
+  - Redeploy the frontend to apply
+- Backend security notes:
+  - We already allow CORS and the `ngrok-skip-browser-warning` header
+  - Add your Vercel domain to `CSRF_TRUSTED_ORIGINS` (e.g. `https://your-project.vercel.app`)
+  - Free ngrok domains change on restart; update `VITE_API_URL` and redeploy when it changes
+
 ### Frontend Setup
 1.  Navigate to the frontend folder:
     ```powershell
