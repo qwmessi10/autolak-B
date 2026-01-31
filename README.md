@@ -18,36 +18,31 @@
 *   Node.js 16+
 *   MySQL Server (Running locally)
 
-### Backend Setup
+### Backend Setup (No Virtual Environment)
 1.  Navigate to the backend folder:
     ```powershell
     cd backend
     ```
-2.  Create/Activate Virtual Environment:
+2.  Install dependencies globally (or user level):
     ```powershell
-    python -m venv venv
-    .\venv\Scripts\activate
+    pip install -r requirements.txt
+    # If pip not found, use:
+    python -m pip install -r requirements.txt
     ```
-3.  Install Dependencies:
+3.  Database Setup:
     ```powershell
-    pip install django djangorestframework django-cors-headers mysqlclient Pillow requests
+    # Ensure MySQL is running (user: root, password: root)
+    # Create database 'autolak' if not exists
+    python manage.py migrate
     ```
-4.  Database Setup:
-    *   Ensure MySQL is running with user `root` and password `root`.
-    *   Create database `autolak` (if not exists).
-    *   Run migrations:
-        ```powershell
-        python manage.py makemigrations
-        python manage.py migrate
-        ```
-5.  Create Admin User (if not exists):
+4.  Create Admin User (optional):
     ```powershell
     python manage.py createsuperuser
     # Username: admin
     # Email: admin@example.com
     # Password: zw20181227
     ```
-6.  Run Server:
+5.  Run Server:
     ```powershell
     python manage.py runserver
     ```

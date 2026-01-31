@@ -18,36 +18,31 @@
 *   Node.js 16+
 *   MySQL Server (本地运行)
 
-### 后端设置 (Backend)
+### 后端设置（不使用虚拟环境）
 1.  进入后端文件夹：
     ```powershell
     cd backend
     ```
-2.  创建/激活虚拟环境：
+2.  全局（或用户级）安装依赖：
     ```powershell
-    python -m venv venv 
-    .\venv\Scripts\activate
+    pip install -r requirements.txt
+    # 如果没有 pip 命令：
+    python -m pip install -r requirements.txt
     ```
-3.  安装依赖：
+3.  数据库设置：
     ```powershell
-    pip install django djangorestframework django-cors-headers mysqlclient Pillow requests
+    # 确保 MySQL 运行，用户名 root 密码 root
+    # 数据库 autolak 存在（如未创建请自行创建）
+    python manage.py migrate
     ```
-4.  数据库设置：
-    *   确保 MySQL 正在运行，用户名为 `root`，密码为 `root`。
-    *   创建数据库 `autolak` (如果尚未存在)。
-    *   运行迁移命令（创建表结构）：
-        ```powershell
-        python manage.py makemigrations
-        python manage.py migrate
-        ```
-5.  创建管理员账号 (如果尚未存在)：
+4.  创建管理员账号（可选）：
     ```powershell
     python manage.py createsuperuser
     # 用户名: admin
     # 邮箱: admin@example.com
     # 密码: zw20181227
     ```
-6.  运行服务器：
+5.  运行服务器：
     ```powershell
     python manage.py runserver
     ```

@@ -62,7 +62,7 @@ const getFullUrl = (url: string) => {
 // Data-前端图片
 const slogan = ref({
   text: "",
-  image: "https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=India%20YouTube%20Growth%20Success%20Digital%20Marketing%20South%20Asian%20Business&image_size=landscape_16_9"
+  image: "/fengmian.jpg"
 });
 
 const intro = ref({
@@ -104,7 +104,7 @@ onMounted(async () => {
             const config = res.data[0]; 
             
             if (config.slogan_text) slogan.value.text = config.slogan_text;
-            if (config.slogan_image) slogan.value.image = getFullUrl(config.slogan_image);
+            // Keep local default hero image (/fengmian.jpg); do not override with backend image
             
             if (config.intro_text) intro.value.text = config.intro_text;
             if (config.intro_flowchart) intro.value.flowchart = getFullUrl(config.intro_flowchart);
@@ -277,7 +277,7 @@ onMounted(async () => {
                  <!-- Main Image with Mask -->
                  <div class="absolute inset-0 md:-right-20 md:-top-10 md:-bottom-10 bg-white/5 rounded-3xl transform rotate-3 backdrop-blur-sm border border-white/10"></div>
                  <div class="absolute inset-0 md:left-4 md:right-4 md:top-4 md:bottom-4 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                    <img :src="slogan.image" alt="Visual" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-1000" />
+                    <img :src="slogan.image" alt="Visual" class="w-full h-full object-cover object-top transform hover:scale-105 transition-transform duration-1000" />
                     <!-- Overlay Gradient -->
                     <div class="absolute inset-0 bg-gradient-to-t from-navy-blue/80 via-transparent to-transparent opacity-60"></div>
                  </div>
